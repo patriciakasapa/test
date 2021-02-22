@@ -1,0 +1,30 @@
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <p>
+        Form Status: {{ formGroup.status }}
+    </p>
+    <label>
+        First Name:
+        <input type="text" formControlName="firstName" required>
+      </label>
+      <p>gg</p>
+      <label>
+        Last Name:
+        <input type="text" formControlName="lastName" required>
+      </label>
+      <label>
+        Email Address:
+        <input type="text" formControlName="emailAddress"required>
+      </label>
+      <label>
+        Department:
+        <input type="text" formControlName="department"required>
+      </label>
+      <label>
+        Role:
+        <input type="text" formControlName="role"required>
+      </label>
+    <button class="button" type="submit" [disabled]="!formGroup.valid">Submit</button>
+    <p>
+        Form Value: {{ formGroup.value }}
+    </p>
+</form>
