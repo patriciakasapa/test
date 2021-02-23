@@ -1,30 +1,106 @@
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-    <p>
-        Form Status: {{ formGroup.status }}
-    </p>
-    <label>
-        First Name:
-        <input type="text" formControlName="firstName" required>
-      </label>
-      <p>gg</p>
-      <label>
-        Last Name:
-        <input type="text" formControlName="lastName" required>
-      </label>
-      <label>
-        Email Address:
-        <input type="text" formControlName="emailAddress"required>
-      </label>
-      <label>
-        Department:
-        <input type="text" formControlName="department"required>
-      </label>
-      <label>
-        Role:
-        <input type="text" formControlName="role"required>
-      </label>
-    <button class="button" type="submit" [disabled]="!formGroup.valid">Submit</button>
-    <p>
-        Form Value: {{ formGroup.value }}
-    </p>
-</form>
+<!-- Add Employee Modal -->
+<div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="addEmployeeModalLabel">Add New Employee</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form #addForm="ngForm" (ngSubmit)="onAddEmloyee(addForm)">
+              <div class="formGroup">
+                <label for="firstName">First Name</label>
+                <input type="text" ngModel name="firstName" class="form-control" id="firstName" placeholder="First Name" required>
+             </div>
+             <div class="formGroup">
+                 <label for="lastName">Last Name</label>
+                 <input type="text" ngModel name="lastName" class="form-control" id="lastName" placeholder="Last Name" required>
+              </div>
+             <div class="formGroup">
+                <label for="emailAddress">Email Address</label>
+                <input type="emailAddress" ngModel name="emailAddress" class="form-control" id="emailAddress" placeholder="emailAddress Address" required>
+             </div>
+             <div class="formGroup">
+                <label for="department">Department</label>
+                <input type="text" ngModel name="department" class="form-control" id="department" placeholder="department" required>
+             </div>
+             <div class="formGroup">
+                <label for="role">role</label>
+                <input type="text" ngModel name="role" class="form-control" id="role" placeholder="role" required>
+             </div>
+             <div class="formGroup">
+                <label for="imageUrl">Image URL</label>
+                <input type="text" ngModel name="imageUrl" class="form-control" id="imageUrl" placeholder="Image URL">
+             </div>
+            <div class="modal-footer">
+               <button type="button" id="close" class="btn btn-secondary" data-dismiss="modal">Close</button>
+               <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
+            </div>
+            </form>
+         </div>
+      </div>
+    </div>
+    </div>
+
+      <!-- <form [formGroup]="formGroup" #addForm="ngForm" (ngSubmit)="onAddEmloyee(addForm)">
+        <p>
+            Form Status: {{ formGroup.status }}
+        </p>
+        <label>
+            First Name:
+            <input type="text" formControlName="firstName" required>
+          </label>
+          <p>gg</p>
+          <label>
+            Last Name:
+            <input type="text" formControlName="lastName" required>
+          </label>
+          <label>
+            Email Address:
+            <input type="text" formControlName="emailAddress"required>
+          </label>
+          <label>
+            Department:
+            <input type="text" formControlName="department"required>
+          </label>
+          <label>
+            Role:
+            <input type="text" formControlName="role"required>
+          </label>
+          <label>
+            imageUrl:
+            <input type="text" formControlName="role">
+          </label>
+          <div>
+            <button type="button" id="close" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button class="button" type="submit" [disabled]="!formGroup.valid">Submit</button>
+          </div>
+    </form> -->
+
+
+    <!-- <div class="formGroup">
+        <label for="firstName">First Name</label>
+        <input type="text" ngModel name="firstName" class="form-control" id="firstName" placeholder="First Name" required>
+     </div>
+     <div class="formGroup">
+         <label for="lastName">Last Name</label>
+         <input type="text" ngModel name="lastName" class="form-control" id="lastName" placeholder="Last Name" required>
+      </div>
+     <div class="formGroup">
+        <label for="emailAddress">Email Address</label>
+        <input type="emailAddress" ngModel name="emailAddress" class="form-control" id="emailAddress" placeholder="emailAddress Address" required>
+     </div>
+     <div class="formGroup">
+        <label for="department">Department</label>
+        <input type="text" ngModel name="department" class="form-control" id="department" placeholder="department" required>
+     </div>
+     <div class="formGroup">
+        <label for="role">role</label>
+        <input type="text" ngModel name="role" class="form-control" id="role" placeholder="role" required>
+     </div>
+     <div class="formGroup">
+        <label for="imageUrl">Image URL</label>
+        <input type="text" ngModel name="imageUrl" class="form-control" id="imageUrl" placeholder="Image URL">
+     </div> -->

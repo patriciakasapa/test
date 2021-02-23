@@ -1,5 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, NgForm, Validators } from '@angular/forms';
+import { Employee } from '../employee';
+import { EmployeeService } from '../employee.service';
 
 @Component({
   selector: 'app-form',
@@ -7,20 +10,37 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
   styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnInit {
+
   formGroup = this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     emailAddress: ['', Validators.required],
     department: ['', Validators.required],
     role: ['', Validators.required],
+    imageUrl: ['']
   });
-  constructor(private fb: FormBuilder) { }
+
+  constructor(private fb: FormBuilder, private employeeService: EmployeeService) { }
 
   ngOnInit(): void {
   }
-  onSubmit() {
-    // TODO: Use EventEmitter with form value
-    console.warn(this.formGroup.value);
+
+  public onAddEmloyee(addForm: any): void {
+    document.getElementById('close')?.click();
+    this.employeeService.addNewEmployee(addForm.value).subscribe(
+      (response: Employee) => {
+        console.log(response);
+        this.getEmployees();
+        addForm.reset();
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+        addForm.reset();
+      }
+    );
+  }
+  getEmployees() {
+    this.employeeService.GetEmployees();
   }
 
 }
