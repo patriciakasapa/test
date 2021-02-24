@@ -1,9 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Employee } from './employee';
-import { EmployeeService } from './employee.service';
+import { FormBuilder, NgForm, Validators } from '@angular/forms';
+import { EmployeeService } from './services/employee.service';
 import { Router } from '@angular/router';
+import { Employee } from './services/employee';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-root',
@@ -12,15 +13,26 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit{
   title = 'test';
-  
-  public employees: Employee[] = [];
-  public updateEmployee!: Employee;
-  public deleteEmployee!: Employee;
 
-  constructor(private employeeService: EmployeeService, private router: Router) { }
+  public employees: Employee[] = [];
+  public focusedEmployee!: Employee;
+  formGroup = this.fb.group({
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
+    emailAddress: ['', Validators.required],
+    department: ['', Validators.required],
+    role: ['', Validators.required],
+    imageUrl: ['']
+  });
+
+  constructor(private fb: FormBuilder, private employeeService: EmployeeService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.getAllEmployees();
+  }
+
+  open(content: any) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then(() => {}, () => {});
   }
 
   public getAllEmployees(): void {
@@ -32,11 +44,24 @@ export class AppComponent implements OnInit{
     });
   }
 
-  public onUpdateEmloyee(employee: Employee): void {
-    this.employeeService.updateEmployeeInfo(employee).subscribe(
+  public onAddEmployee(addForm: any): void {
+    this.employeeService.addNewEmployee(addForm.value).subscribe(
       (response: Employee) => {
-        console.log(response);
-        this.getAllEmployees();
+        this.employees.push(response);
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+        addForm.reset();
+      }
+    );
+  }
+
+  public onUpdateEmployee(updateForm: any): void {
+    const employee: Employee = updateForm.value;
+    this.employeeService.updateEmployeeInfo(this.focusedEmployee?.id, employee).subscribe(() => {
+        const index = this.employees.findIndex(employee => employee.id === this.focusedEmployee?.id);
+        employee.id = this.focusedEmployee?.id;
+        this.employees[index] = employee;
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -44,11 +69,10 @@ export class AppComponent implements OnInit{
     );
   }
 
-  public onDeleteEmloyee(employeeId: number): void {
-    this.employeeService.deleteEmployee(employeeId).subscribe(
-      (response: void) => {
-        console.log(response);
-        this.getAllEmployees();
+  public onDeleteEmployee(): void {
+    this.employeeService.deleteEmployee(this.focusedEmployee?.id).subscribe(() => {
+      // remove deleted employee from list
+      this.employees = this.employees.filter(employee => employee.id !== this.focusedEmployee?.id);
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -74,8 +98,11 @@ export class AppComponent implements OnInit{
     }
   }
 
-  public onOpenModal(employee: Employee, mode: string): void {
-   this.employeeService.OnOpenModal(employee, mode)
+  public onOpenModal(employee: Employee, mode: string, template: any): void {
+    this.focusedEmployee = employee;
+    if (mode === 'delete' || mode === 'edit') {
+      this.open(template);
+    }
   }
 
 }
